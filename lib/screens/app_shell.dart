@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/lesson_provider.dart';
-import '../services/firestore_service.dart';
 import '../widgets/lesson_drawer.dart';
 import 'tabs/timetable_tab.dart';
 import 'tabs/global_hub_tab.dart';
@@ -39,9 +38,7 @@ class _AppShellState extends State<AppShell> {
             Padding(
               padding: EdgeInsets.only(right: 8),
               child: Chip(
-                label: Text(
-                  _lessonName(context, lessonProvider.selectedLesson!.id),
-                ),
+                label: Text(lessonProvider.selectedLesson!.name),
                 onDeleted: () => lessonProvider.clearSelection(),
               ),
             ),
@@ -73,10 +70,5 @@ class _AppShellState extends State<AppShell> {
             .toList(),
       ),
     );
-  }
-
-  String _lessonName(BuildContext context, int lessonId) {
-    final fs = FirestoreService();
-    return fs.getLesson(lessonId)?.name ?? 'Lesson $lessonId';
   }
 }

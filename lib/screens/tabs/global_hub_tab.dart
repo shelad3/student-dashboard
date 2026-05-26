@@ -37,8 +37,9 @@ class _GlobalHubTabState extends State<GlobalHubTab>
     final text = _msgCtrl.text.trim();
     if (text.isEmpty) return;
     final auth = context.read<AuthProvider>();
+    final user = auth.currentUser;
+    if (user == null) return;
     final chat = context.read<ChatProvider>();
-    final user = auth.currentUser!;
     chat.addMessage(ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       senderId: user.uid,
@@ -54,8 +55,9 @@ class _GlobalHubTabState extends State<GlobalHubTab>
     final text = _annCtrl.text.trim();
     if (text.isEmpty) return;
     final auth = context.read<AuthProvider>();
+    final user = auth.currentUser;
+    if (user == null) return;
     final chat = context.read<ChatProvider>();
-    final user = auth.currentUser!;
     chat.addAnnouncement(user.uid, user.fullName, text);
     _annCtrl.clear();
   }

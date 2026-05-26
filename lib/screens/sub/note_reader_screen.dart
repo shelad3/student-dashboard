@@ -145,9 +145,11 @@ class _NoteReaderScreenState extends State<NoteReaderScreen> {
           FilledButton(
             onPressed: () {
               final auth = context.read<AuthProvider>();
+              final user = auth.currentUser;
+              if (user == null) return;
               context.read<NotesProvider>().saveStudentNote(
                 widget.note.noteId,
-                auth.currentUser!.uid,
+                user.uid,
                 {
                   'index': sel.start,
                   'length': sel.end - sel.start,

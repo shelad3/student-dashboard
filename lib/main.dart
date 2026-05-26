@@ -15,8 +15,16 @@ import 'widgets/update_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    FirebaseNotAvailableError.initialized = true;
+  }
   runApp(const StudentDashboardApp());
+}
+
+class FirebaseNotAvailableError {
+  static bool initialized = false;
 }
 
 class StudentDashboardApp extends StatefulWidget {
@@ -38,14 +46,16 @@ class _StudentDashboardAppState extends State<StudentDashboardApp> {
   }
 
   Future<void> _checkForUpdate() async {
-    final result = await _updateService.checkForUpdate();
-    if (result.hasUpdate && result.info != null && mounted) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => UpdateDialog(info: result.info!),
-      );
-    }
+    try {
+      final result = await _updateService.checkForUpdate();
+      if (result.hasUpdate && result.info != null && mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => UpdateDialog(info: result.info!),
+        );
+      }
+    } catch (_) {}
   }
 
   @override

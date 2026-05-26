@@ -39,7 +39,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
     if (!result.success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.error!)),
+        SnackBar(
+          content: Text(result.error ?? 'Invalid credentials. Please contact Class Admin.'),
+        ),
       );
       return;
     }

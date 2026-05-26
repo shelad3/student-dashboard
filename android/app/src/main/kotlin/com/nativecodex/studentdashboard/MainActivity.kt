@@ -1,4 +1,4 @@
-package com.studentdashboard.student_dashboard
+package com.nativecodex.studentdashboard
 
 import io.flutter.embedding.android.FlutterActivity
 
