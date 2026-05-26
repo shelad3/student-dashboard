@@ -15,6 +15,7 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
   final _confirmCtrl = TextEditingController();
   bool _obscure1 = true;
   bool _obscure2 = true;
+  bool _saving = false;
 
   @override
   void dispose() {
@@ -27,26 +28,45 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     final pw = _passwordCtrl.text.trim();
     final confirm = _confirmCtrl.text.trim();
 
+    if (pw.isEmpty) {
+      _showError('Please enter a new password');
+      return;
+    }
     if (pw.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password must be at least 6 characters')),
-      );
+      _showError('Password must be at least 6 characters');
       return;
     }
     if (pw != confirm) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Passwords do not match')),
-      );
+      _showError('Passwords do not match');
       return;
     }
 
-    final auth = context.read<AuthProvider>();
-    auth.changePassword(pw);
-    auth.completeFirstLogin();
+    setState(() => _saving = true);
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const AppShell()),
+    try {
+      final auth = context.read<AuthProvider>();
+      auth.changePassword(pw);
+      auth.completeFirstLogin();
+
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AppShell()),
+        (_) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      _showError('Something went wrong. Please try again.');
+    }
+  }
+
+  void _showError(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: Colors.red.shade600,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -55,9 +75,9 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
     final user = context.read<AuthProvider>().currentUser;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Set Up Profile')),
-      body: Padding(
-        padding: EdgeInsets.all(24),
+      appBar: AppBar(title: const Text('Set Up Profile')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -66,35 +86,35 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 radius: 40,
                 child: Text(
                   (user?.fullName ?? '?')[0],
-                  style: TextStyle(fontSize: 32),
+                  style: const TextStyle(fontSize: 32),
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Center(
               child: Text(
                 'Welcome, ${user?.fullName ?? ''}',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Center(
               child: Text(
                 'Reg: ${user?.regNumber ?? ''}',
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Text(
               'Change your default password:',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _passwordCtrl,
               decoration: InputDecoration(
                 labelText: 'New Password',
-                prefixIcon: Icon(Icons.lock_outline),
+                prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscure1 ? Icons.visibility_off : Icons.visibility,
@@ -106,13 +126,14 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
                 ),
               ),
               obscureText: _obscure1,
+              enabled: !_saving,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _confirmCtrl,
               decoration: InputDecoration(
                 labelText: 'Confirm Password',
-                prefixIcon: Icon(Icons.lock_outline),
+                prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscure2 ? Icons.visibility_off : Icons.visibility,
@@ -125,15 +146,25 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
               ),
               obscureText: _obscure2,
               textInputAction: TextInputAction.done,
+              enabled: !_saving,
               onSubmitted: (_) => _save(),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               height: 48,
               child: FilledButton(
-                onPressed: _save,
-                child: Text('Save & Continue'),
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('Save & Continue'),
               ),
             ),
           ],
