@@ -5,7 +5,7 @@ import '../models/update_model.dart';
 
 class UpdateService {
   static const _versionUrl =
-      'https://raw.githubusercontent.com/nativecodex/student-dashboard/main/version.json';
+      'https://raw.githubusercontent.com/shelad3/student-dashboard/main/version.json';
 
   Future<UpdateCheckResult> checkForUpdate() async {
     try {

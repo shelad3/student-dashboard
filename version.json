@@ -1,0 +1,6 @@
+{
+  "latest_version": "1.0.0",
+  "download_url": "https://github.com/shelad3/student-dashboard/releases/download/v1.0.0/app-release.apk",
+  "download_size": "24 MB",
+  "release_notes": "🎉 Initial Release v1.0.0\n\n- Timetable with real-time shift tracking\n- Global Hub with announcements and group chat\n- Rich text notes engine with teacher highlights\n- Student personal annotations and sticky notes\n- Profile management with password change\n- In-app update notifications\n- Firebase integration for auth and data sync"
+}

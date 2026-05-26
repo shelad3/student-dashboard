@@ -1,17 +1,30 @@
-# student_dashboard
+# Student Dashboard
 
-A new Flutter project.
+A class management app for a closed cohort of 15–17 students and their 4 teachers.
+
+## Features
+
+- **Timetable** — Real-time schedule tracking with shift detection and color-coded alerts
+- **Global Hub** — Teacher announcements + public group discussions
+- **Notes Engine** — Rich text notes with teacher highlights and student personal annotations
+- **Profile** — Account settings, password change, and profile management
+- **In-App Updates** — Automatic version check on launch with download prompt
+
+## Tech Stack
+
+- **Frontend:** Flutter (Material 3)
+- **Backend:** Firebase (Auth, Firestore, Storage)
+- **State:** Provider
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+```bash
+flutter pub get
+flutter run
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Build
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter build apk --release
+```
