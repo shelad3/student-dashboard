@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1074048693943",
+    "project_id": "student-dashboard-415f7",
+    "storage_bucket": "student-dashboard-415f7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074048693943:android:66b166aea2d5e56fb33f32",
+        "android_client_info": {
+          "package_name": "com.nativecodex.studentdashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMZJqRdYH2Fnl6joYDMeiIqBi7LpTHB8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
